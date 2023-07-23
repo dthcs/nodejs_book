@@ -7,8 +7,13 @@ const path = require('path');
 
 dotenv.config();
 
+const indexRouter = require('./routes');
+const userRouter = require('./routes/user');
+
 const app = express();
 app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 //middlewares
 app.use(morgan('dev'));
@@ -29,17 +34,23 @@ app.use(session({
     name: 'session-cookie',
 }));
 
+app.use('/', indexRouter);
+app.use('/user', userRouter);
 app.use((req, res, next) => {
-    console.log("execute all requests");
-    next();
+    res.status(404).send('Not Found');
 });
 
-app.get('/', (req, res, next) => {
-    console.log('only execute GET / request');
-    next();
-}, (req, res) => {
-    throw new Error('Go to middlewares for error handling')
-});
+// app.use((req, res, next) => {
+//     console.log("execute all requests");
+//     next();
+// });
+
+// app.get('/', (req, res, next) => {
+//     console.log('only execute GET / request');
+//     next();
+// }, (req, res) => {
+//     throw new Error('Go to middlewares for error handling')
+// });
 
 app.use((err, req, res, next) => {
     console.error(err);
