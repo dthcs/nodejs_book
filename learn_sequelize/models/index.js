@@ -9,8 +9,9 @@ const db = {};
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 db.sequelize = sequelize;
+
 db.User = User;
-db.comment = Comment;
+db.Comment = Comment;
 
 User.initiate(sequelize);
 Comment.initiate(sequelize);
